@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.ShoujiDao">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.id as id
+        ,a.shouji_name as shoujiName
+        ,a.shouji_photo as shoujiPhoto
+        ,a.shouji_types as shoujiTypes
+        ,a.shouji_kucun_number as shoujiKucunNumber
+        ,a.shouji_price as shoujiPrice
+        ,a.shouji_old_money as shoujiOldMoney
+        ,a.shouji_new_money as shoujiNewMoney
+        ,a.shouji_clicknum as shoujiClicknum
+        ,a.shangxia_types as shangxiaTypes
+        ,a.shouji_delete as shoujiDelete
+        ,a.shouji_content as shoujiContent
+        ,a.create_time as createTime
+    </sql>
+    <select id="selectListView" parameterType="map" resultType="com.entity.view.ShoujiView" >
+        SELECT
+        <include refid="Base_Column_List" />
+
+--         级联表的字段
+
+        FROM shouji  a
+
+        <where>
+            <if test="params.ids != null">
+                and a.id in
+                <foreach item="item" index="index" collection="params.ids" open="(" separator="," close=")">
+                #{item}
+                </foreach>
+            </if>
+            <if test=" params.shoujiName != '' and params.shoujiName != null and params.shoujiName != 'null' ">
+                and a.shouji_name like CONCAT('%',#{params.shoujiName},'%')
+            </if>
+            <if test="params.shoujiTypes != null and params.shoujiTypes != ''">
+                and a.shouji_types = #{params.shoujiTypes}
+            </if>
+            <if test="params.shoujiKucunNumberStart != null and params.shoujiKucunNumberStart != ''">
+                <![CDATA[  and a.shouji_kucun_number >= #{params.shoujiKucunNumberStart}   ]]>
+            </if>
+            <if test="params.shoujiKucunNumberEnd != null and params.shoujiKucunNumberEnd != ''">
+                <![CDATA[  and a.shouji_kucun_number <= #{params.shoujiKucunNumberEnd}   ]]>
+            </if>
+             <if test="params.shoujiKucunNumber != null and params.shoujiKucunNumber != ''">
+                and a.shouji_kucun_number = #{params.shoujiKucunNumber}
+             </if>
+            <if test="params.shoujiPriceStart != null and params.shoujiPriceStart != ''">
+                <![CDATA[  and a.shouji_price >= #{params.shoujiPriceStart}   ]]>
+            </if>
+            <if test="params.shoujiPriceEnd != null and params.shoujiPriceEnd != ''">
+                <![CDATA[  and a.shouji_price <= #{params.shoujiPriceEnd}   ]]>
+            </if>
+             <if test="params.shoujiPrice != null and params.shoujiPrice != ''">
+                and a.shouji_price = #{params.shoujiPrice}
+             </if>
+            <if test="params.shoujiOldMoneyStart != null ">
+                <![CDATA[  and a.shouji_old_money >= #{params.shoujiOldMoneyStart}   ]]>
+            </if>
+            <if test="params.shoujiOldMoneyEnd != null ">
+                <![CDATA[  and a.shouji_old_money <= #{params.shoujiOldMoneyEnd}   ]]>
+            </if>
+            <if test="params.shoujiNewMoneyStart != null ">
+                <![CDATA[  and a.shouji_new_money >= #{params.shoujiNewMoneyStart}   ]]>
+            </if>
+            <if test="params.shoujiNewMoneyEnd != null ">
+                <![CDATA[  and a.shouji_new_money <= #{params.shoujiNewMoneyEnd}   ]]>
+            </if>
+            <if test="params.shoujiClicknumStart != null and params.shoujiClicknumStart != ''">
+                <![CDATA[  and a.shouji_clicknum >= #{params.shoujiClicknumStart}   ]]>
+            </if>
+            <if test="params.shoujiClicknumEnd != null and params.shoujiClicknumEnd != ''">
+                <![CDATA[  and a.shouji_clicknum <= #{params.shoujiClicknumEnd}   ]]>
+            </if>
+             <if test="params.shoujiClicknum != null and params.shoujiClicknum != ''">
+                and a.shouji_clicknum = #{params.shoujiClicknum}
+             </if>
+            <if test="params.shangxiaTypes != null and params.shangxiaTypes != ''">
+                and a.shangxia_types = #{params.shangxiaTypes}
+            </if>
+            <if test="params.shoujiDeleteStart != null and params.shoujiDeleteStart != ''">
+                <![CDATA[  and a.shouji_delete >= #{params.shoujiDeleteStart}   ]]>
+            </if>
+            <if test="params.shoujiDeleteEnd != null and params.shoujiDeleteEnd != ''">
+                <![CDATA[  and a.shouji_delete <= #{params.shoujiDeleteEnd}   ]]>
+            </if>
+             <if test="params.shoujiDelete != null and params.shoujiDelete != ''">
+                and a.shouji_delete = #{params.shoujiDelete}
+             </if>
+            <if test=" params.shoujiContent != '' and params.shoujiContent != null and params.shoujiContent != 'null' ">
+                and a.shouji_content like CONCAT('%',#{params.shoujiContent},'%')
+            </if>
+
+        </where>
+
+        order by a.${params.orderBy} desc 
+    </select>
+
+</mapper>
